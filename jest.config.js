@@ -3,4 +3,5 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
   },
   testEnvironment: 'node',
+  maxWorkers: 1,
 };

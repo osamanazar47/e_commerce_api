@@ -17,8 +17,8 @@ const productSchema = new Schema({
   },
   description: String,
   image: String,
-  category: String
-})
+  category: String,
+});
 
 const Product = model('Product', productSchema);
 
