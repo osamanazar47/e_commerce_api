@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import supertest from 'supertest';
-import server, { app } from '../server'
+import server, { app } from '../server';
 import User from '../models/user';
 
 jest.setTimeout(10000); // Set timeout for tests

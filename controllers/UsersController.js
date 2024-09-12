@@ -1,5 +1,5 @@
-import User from '../models/user';
 import bcrypt from 'bcryptjs';
+import User from '../models/user';
 
 export default class UsersController {
   static async createUser(req, res) {
@@ -25,18 +25,18 @@ export default class UsersController {
       password: hashedPassword,
     });
     await user.save();
-    res.status(201).json(user);
+    return res.status(201).json(user);
   }
 
   static async findUserById(req, res) {
     try {
       const user = await User.findById(req.params.id);
       if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found' });
       }
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -46,9 +46,9 @@ export default class UsersController {
       if (result.deletedCount === 0) {
         return res.status(404).json({ message: 'User not found' });
       }
-      res.status(204).json({ message: 'User deleted successfully' });
+      return res.status(204).json({ message: 'User deleted successfully' });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -73,9 +73,9 @@ export default class UsersController {
       }
 
       // Return the updated user
-      res.status(200).json(updatedUser);
+      return res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 }
