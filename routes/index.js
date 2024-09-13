@@ -19,4 +19,11 @@ router.get('/products/categories', ProductsController.getCategories); // For get
 router.put('/products/:id', ProductsController.updateProduct);
 router.delete('/products/:id', ProductsController.deleteProduct);
 
+// Order routes
+router.post('/orders', OrdersController.addOrder);
+router.get('/orders', OrdersController.getOrders);
+router.get('/orders/:id', OrdersController.getOrderById);
+router.get('/users/:userId/orders', OrdersController.getUserOrders);
+router.put('/orders/:id', OrdersController.updateOrder);
+router.delete('/orders/:id', OrdersController.deleteOrder);
 export default router;
