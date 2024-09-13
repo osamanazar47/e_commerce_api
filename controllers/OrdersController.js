@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import Order from '../models/order';
 import Product from '../models/product';
 import User from '../models/user';
