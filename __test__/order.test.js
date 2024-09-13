@@ -18,6 +18,7 @@ describe('Orders Controller', () => {
     await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
   });
 
@@ -170,12 +171,14 @@ describe('Orders Controller', () => {
   // Test case for updating an order
   describe('PUT /orders/:id', () => {
     let orderId;
+    let productId;
+    let userId;
 
     beforeAll(async () => {
       // Create a user with a unique email
       const user = new User({ name: 'Test User', email: `test${Date.now()}@example.com`, password: 'password123' });
       const savedUser = await user.save();
-      const userId = savedUser._id;
+      userId = savedUser._id;
 
       // Create a product
       const product = new Product({
@@ -185,7 +188,7 @@ describe('Orders Controller', () => {
         stock: 10,
       });
       const savedProduct = await product.save();
-      const productId = savedProduct._id;
+      productId = savedProduct._id;
 
       // Create an order
       const order = new Order({
@@ -200,7 +203,7 @@ describe('Orders Controller', () => {
 
     it('should update an order', async () => {
       const updateData = {
-        products: [{ productId: '605c72ef56f536001f6471a5', quantity: 1 }], // Update with new product
+        products: [{ productId: productId.toString(), quantity: 1 }], // Update with new product
       };
 
       const res = await supertest(app)
