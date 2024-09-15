@@ -7,7 +7,8 @@ export default class OrdersController {
   // Create a new order
   static async createOrder(req, res) {
     try {
-      const { userId, products } = req.body;
+      const { userId } = req.user;
+      const { products } = req.body;
 
       // Validate the user
       const user = await User.findById(userId);
@@ -26,6 +27,8 @@ export default class OrdersController {
         if (item.quantity > product.stock) {
           return res.status(400).json({ message: `Insufficient stock for product ${product.title}` });
         }
+        product.stock -= item.quantity;
+        await product.save();
         totalAmount += product.price * item.quantity;
         validProducts.push({ productId: item.productId, quantity: item.quantity });
       }
@@ -48,10 +51,19 @@ export default class OrdersController {
   // Get all orders
   static async getAllOrders(req, res) {
     try {
-      const orders = await Order.find().populate('userId').populate('products.productId');
-      res.status(200).json(orders);
+      // get the userId from the user object
+      const { userId } = req.user;
+
+      const orders = await Order.find({ userId }).populate('userId').populate('products.productId');
+
+      // If no orders are found, return an empty array
+      if (orders.length === 0) {
+        return res.status(404).json({ message: 'No orders found for this user' });
+      }
+
+      return res.status(200).json(orders);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -59,7 +71,10 @@ export default class OrdersController {
   static async getOrderById(req, res) {
     try {
       const { id } = req.params;
-      const order = await Order.findById(id).populate('userId').populate('products.productId');
+      const { userId } = req.user;
+      const order = await Order.findOne({ _id: id, userId })
+        .populate('userId')
+        .populate('products.productId');
 
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
@@ -76,8 +91,9 @@ export default class OrdersController {
     try {
       const { id } = req.params;
       const { products } = req.body;
+      const { userId } = req.user;
 
-      const order = await Order.findById(id);
+      const order = await Order.findOne({ _id: id, userId });
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
       }
@@ -92,6 +108,8 @@ export default class OrdersController {
         if (item.quantity > product.stock) {
           return res.status(400).json({ message: `Insufficient stock for product ${product.title}` });
         }
+        product.stock -= item.quantity;
+        await product.save();
         totalAmount += product.price * item.quantity;
         validProducts.push({ productId: item.productId, quantity: item.quantity });
       }
@@ -110,7 +128,8 @@ export default class OrdersController {
   static async deleteOrder(req, res) {
     try {
       const { id } = req.params;
-      const order = await Order.findByIdAndDelete(id);
+      const { userId } = req.user;
+      const order = await Order.findByIdAndDelete({ _id: id, userId });
 
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });

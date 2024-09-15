@@ -2,8 +2,14 @@ import express from 'express';
 import UsersController from '../controllers/UsersController';
 import ProductsController from '../controllers/ProductsController';
 import OrdersController from '../controllers/OrdersController';
+import AuthController from '../controllers/AuthController';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = express.Router();
+
+// Authentication routes
+router.post('/register', AuthController.register);
+router.post('/login', AuthController.login);
 
 // User routes
 router.post('/users', UsersController.createUser);
@@ -21,9 +27,9 @@ router.put('/products/:id', ProductsController.updateProduct);
 router.delete('/products/:id', ProductsController.deleteProduct);
 
 // Order routes
-router.post('/orders', OrdersController.createOrder);
-router.get('/orders', OrdersController.getAllOrders);
-router.get('/orders/:id', OrdersController.getOrderById);
-router.put('/orders/:id', OrdersController.updateOrder);
-router.delete('/orders/:id', OrdersController.deleteOrder);
+router.post('/orders', authMiddleware, OrdersController.createOrder);
+router.get('/orders', authMiddleware, OrdersController.getAllOrders);
+router.get('/orders/:id', authMiddleware, OrdersController.getOrderById);
+router.put('/orders/:id', authMiddleware, OrdersController.updateOrder);
+router.delete('/orders/:id', authMiddleware, OrdersController.deleteOrder);
 export default router;
