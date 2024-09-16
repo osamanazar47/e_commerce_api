@@ -27,12 +27,21 @@ export default class ProductsController {
   // Get all products with optional sorting and limiting
   static async getProducts(req, res) {
     try {
-      const { sortBy, limit } = req.query;
-      const sortOption = sortBy ? { [sortBy]: 1 } : {}; // Default sorting by ascending order
-      // eslint-disable-next-line radix
-      const limitOption = limit ? parseInt(limit) : 0; // Default is no limit
+      // filters for category and price range
+      const filters = {};
+      if (req.query.category) filters.category = req.query.category;
 
-      const products = await Product.find().sort(sortOption).limit(limitOption);
+      // Handle price filtering
+      if (req.query.priceMin) filters.price = { ...filters.price, $gte: req.query.priceMin };
+      if (req.query.priceMax) filters.price = { ...filters.price, $lte: req.query.priceMax };
+
+      const { sortBy, limit } = req.query;
+      // Default sorting by ascending order
+      const sortOption = sortBy ? { [sortBy]: 1 } : { price: 1 };
+      // eslint-disable-next-line radix
+      const limitOption = limit ? parseInt(limit) : 10; // Default is no limit
+
+      const products = await Product.find(filters).sort(sortOption).limit(limitOption);
       res.status(200).json(products);
     } catch (err) {
       res.status(500).json({ message: err.message });
