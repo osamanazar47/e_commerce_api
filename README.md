@@ -54,6 +54,7 @@ Welcome to the E-Commerce API! This is a RESTful API built with Node.js, Express
    npm run start-server
 
 ### API Endpoints
+
 #### User Registration
 Endpoint: POST /register
 Request Body:
@@ -63,54 +64,54 @@ Request Body:
     "email": "john@example.com",
     "password": "password123"
    }
-Response: JWT token upon successful registration.
+ Response: JWT token upon successful registration.
 
 #### User Login
 POST /login
 Request Body:
-json
-Copy code
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
+   ```json
+   {
+    "email": "john@example.com",
+    "password": "password123"
+   }
 Response: JWT token upon successful login.
-Create Product
+
+#### Create Product
 POST /products
 Request Body:
-json
-Copy code
-{
-  "title": "Laptop",
-  "description": "A great laptop",
-  "price": 1200,
-  "stock": 10,
-  "category": "Electronics"
-}
+   ```json
+   {
+    "title": "Laptop",
+    "description": "A great laptop",
+    "price": 1200,
+    "stock": 10,
+    "category": "Electronics"
+   }
 Response: Product details.
-Add Item to Cart
-POST /cart
-Headers: Authorization: Bearer <token>
+
+#### Add Item to Cart
+POST /cart.
+Headers: Authorization: Bearer <token>.
 Request Body:
-json
-Copy code
-{
-  "productId": "product_id",
-  "quantity": 1
-}
+   ```json
+   {
+    "productId": "product_id",
+    "quantity": 1
+   }
 Response: Cart contents.
-Place Order
-POST /orders
-Headers: Authorization: Bearer <token>
+
+#### Place Order
+POST /orders.
+Headers: Authorization: Bearer <token>.
 Request Body:
-json
-Copy code
-{
-  "totalAmount": 1200,
-  "products": [
-    {
-      "productId": "product_id",
-      "quantity": 1
-    }
-  ]
-}
+   ```json
+   {
+    "totalAmount": 1200,
+    "products": [
+      {
+        "productId": "product_id",
+        "quantity": 1
+      }
+    ]
+   }
+   
