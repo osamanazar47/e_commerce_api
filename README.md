@@ -32,47 +32,40 @@ Welcome to the E-Commerce API! This is a RESTful API built with Node.js, Express
    ```bash
    git clone https://github.com/osamanazar47/e_commerce_api.git
 
-Navigate to the project directory:
+2. Navigate to the project directory:
 
-bash
-Copy code
-cd e_commerce_api
-Install dependencies:
+   ```bash
+   cd e_commerce_api
 
-bash
-Copy code
-npm install
-Set up environment variables. Create a .env file in the root directory with the following contents:
+3. Install dependencies:
+   ```bash
+   npm install
 
-makefile
-Copy code
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/ecommerce
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your_jwt_secret
-Start the server:
+4. Set up environment variables.
+    Create a .env file in the root directory with the following contents:
+   ```makefile
+   PORT=5000
+   MONGO_URI=mongodb://localhost:27017/ecommerce
+   JWT_SECRET=your_jwt_secret
 
-bash
-Copy code
-npm start
-Alternatively, for development with automatic restarts:
+5. Start the server:
 
-bash
-Copy code
-npm run dev
-API Endpoints
-User Registration
-POST /register
+   ```bash
+   npm run start-server
+
+### API Endpoints
+#### User Registration
+Endpoint: POST /register
 Request Body:
-json
-Copy code
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
+   ```json
+   {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123"
+   }
 Response: JWT token upon successful registration.
-User Login
+
+#### User Login
 POST /login
 Request Body:
 json
