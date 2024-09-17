@@ -14,6 +14,7 @@ class CartController {
       // Retrieve current cart from Redis
       const cartKey = `cart:${userId}`;
       const cartData = await redisClient.get(cartKey);
+
       const cart = cartData ? JSON.parse(cartData) : {};
 
       // Update the cart

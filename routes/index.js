@@ -36,6 +36,7 @@ router.delete('/orders/:id', authMiddleware, OrdersController.deleteOrder);
 
 // Cart routes
 router.post('/cart', authMiddleware, CartController.addItemToCart);
-router.get('/cart/:id', authMiddleware, CartController.getCart);
-router.delete('/cart/:id', authMiddleware, CartController.clearCart);
+// i do not need an id for the cart because it's already connected to a user
+router.get('/cart/', authMiddleware, CartController.getCart);
+router.delete('/cart/', authMiddleware, CartController.clearCart);
 export default router;
