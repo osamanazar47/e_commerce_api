@@ -4,6 +4,7 @@ import ProductsController from '../controllers/ProductsController';
 import OrdersController from '../controllers/OrdersController';
 import AuthController from '../controllers/AuthController';
 import authMiddleware from '../middlewares/authMiddleware';
+import CartController from '../controllers/CartsController';
 
 const router = express.Router();
 
@@ -32,4 +33,9 @@ router.get('/orders', authMiddleware, OrdersController.getAllOrders);
 router.get('/orders/:id', authMiddleware, OrdersController.getOrderById);
 router.put('/orders/:id', authMiddleware, OrdersController.updateOrder);
 router.delete('/orders/:id', authMiddleware, OrdersController.deleteOrder);
+
+// Cart routes
+router.post('/cart', authMiddleware, CartController.addItemToCart);
+router.get('/cart/:id', authMiddleware, CartController.getCart);
+router.delete('/cart/:id', authMiddleware, CartController.clearCart);
 export default router;

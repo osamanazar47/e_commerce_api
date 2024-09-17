@@ -2,13 +2,13 @@
 import Order from '../models/order';
 import Product from '../models/product';
 import User from '../models/user';
+import redisClient from '../utils/redis';
 
 export default class OrdersController {
   // Create a new order
   static async createOrder(req, res) {
     try {
-      const { userId } = req.user;
-      const { products } = req.body;
+      const { userId } = req.user; // Get userId from the request (authenticated user)
 
       // Validate the user
       const user = await User.findById(userId);
@@ -16,21 +16,26 @@ export default class OrdersController {
         return res.status(404).json({ message: 'User not found' });
       }
 
-      // Validate the products and calculate total
+      // Retrieve the cart from Redis
+      const cartKey = `cart:${userId}`;
+      const cartData = await redisClient.get(cartKey);
+      const cart = cartData ? JSON.parse(cartData) : {};
+
+      // Validate the cart and calculate total
       let totalAmount = 0;
       const validProducts = [];
-      for (const item of products) {
-        const product = await Product.findById(item.productId);
+      for (const [productId, quantity] of Object.entries(cart)) {
+        const product = await Product.findById(productId);
         if (!product) {
-          return res.status(404).json({ message: `Product with ID ${item.productId} not found` });
+          return res.status(404).json({ message: `Product with ID ${productId} not found` });
         }
-        if (item.quantity > product.stock) {
+        if (quantity > product.stock) {
           return res.status(400).json({ message: `Insufficient stock for product ${product.title}` });
         }
-        product.stock -= item.quantity;
+        product.stock -= quantity;
         await product.save();
-        totalAmount += product.price * item.quantity;
-        validProducts.push({ productId: item.productId, quantity: item.quantity });
+        totalAmount += product.price * quantity;
+        validProducts.push({ productId, quantity });
       }
 
       // Create a new order
@@ -42,6 +47,10 @@ export default class OrdersController {
       });
 
       await newOrder.save();
+
+      // Clear the cart after creating the order
+      await redisClient.del(cartKey);
+
       return res.status(201).json(newOrder);
     } catch (error) {
       return res.status(500).json({ message: error.message });
