@@ -64,7 +64,7 @@ Request Body:
     "email": "john@example.com",
     "password": "password123"
    }
- Response: JWT token upon successful registration.
+   ```
 
 #### User Login
 POST /login
@@ -74,6 +74,7 @@ Request Body:
     "email": "john@example.com",
     "password": "password123"
    }
+   ```
 Response: JWT token upon successful login.
 
 #### Create Product
@@ -87,6 +88,7 @@ Request Body:
     "stock": 10,
     "category": "Electronics"
    }
+   ```
 Response: Product details.
 
 #### Add Item to Cart
@@ -98,6 +100,7 @@ Request Body:
     "productId": "product_id",
     "quantity": 1
    }
+   ```
 Response: Cart contents.
 
 #### Place Order
@@ -114,4 +117,3 @@ Request Body:
       }
     ]
    }
-   
