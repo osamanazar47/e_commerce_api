@@ -8,6 +8,15 @@ export default class AuthController {
     try {
       const { email, password, name } = req.body;
 
+      if (!name) {
+        return res.status(400).json({ error: 'Missing name' });
+      }
+      if (!email) {
+        return res.status(400).json({ error: 'Missing email' });
+      }
+      if (!password) {
+        return res.status(400).json({ error: 'Missing password' });
+      }
       // check if the user already exists
       const existingUser = await User.findOne({ email });
       if (existingUser) {
